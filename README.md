@@ -39,17 +39,25 @@ cd <repository-name>
 ./start_triton_server.sh
 ```
 
-3. In a new terminal, run the client container:
+2. To get the densenet model
+```
+mkdir -p models/densenet_onnx/1
+wget -O models/densenet_onnx/1/model.onnx \
+     https://contentmamluswest001.blob.core.windows.net/content/14b2744cf8d6418c87ffddc3f3127242/9502630827244d60a1214f250e3bbca7/08aed7327d694b8dbaee2c97b8d0fcba/densenet121-1.2.onnx
+
+```
+
+4. In a new terminal, run the client container:
 ```bash
 docker run -it --rm --net=host -v ${PWD}:/workspace/ nvcr.io/nvidia/tritonserver:24.11-py3-sdk bash
 ```
 
-4. Inside the client container, install required packages:
+5. Inside the client container, install required packages:
 ```bash
 pip install torchvision tritonclient[all] gevent
 ```
 
-5. Download a test image:
+6. Download a test image:
 ```bash
 wget -O img1.jpg "https://www.hakaimagazine.com/wp-content/uploads/header-gulf-birds.jpg"
 ```
