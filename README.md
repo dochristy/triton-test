@@ -37,6 +37,11 @@ cd <repository-name>
 2. Start the Triton Server:
 ```bash
 ./start_triton_server.sh
+
+docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
+    -v $(pwd)/models:/models \
+    nvcr.io/nvidia/tritonserver:24.11-py3 \
+    tritonserver --model-repository=/models
 ```
 
 2. To get the densenet model
