@@ -155,7 +155,7 @@ chalice deploy --profile local
 ```
 
 ## 6. Testing 
-( Refer: https://github.com/dochristy/triton-test/blob/main/README.md, for example, how to wget img1.jpg )
+( Refer: https://github.com/dochristy/triton-test/blob/main/README.md, for example, how to wget img1.jpg and pip install )
 
 ### Test Client Implementation
 ```python
