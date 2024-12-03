@@ -239,8 +239,8 @@ except requests.exceptions.RequestException as e:
 root@docker-desktop:/opt/tritonserver# python3 tclient.py
 Prediction results:
 
-```json
- {'model_name': 'models/model.tar.gz', 'result':
+```
+{'model_name': 'models/model.tar.gz', 'result':
 {'model_name': 'models/model.tar.gz', 'model_version': '1',
 'outputs':
 [{'name': 'fc6_1', 'datatype': 'FP32', 'shape': [1000],
