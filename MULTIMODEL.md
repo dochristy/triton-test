@@ -237,6 +237,8 @@ except requests.exceptions.RequestException as e:
 
 ### OUTPUT:
 root@docker-desktop:/opt/tritonserver# python3 tclient.py
+
+
 Prediction results:
 
 ```
