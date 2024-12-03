@@ -80,8 +80,27 @@ aws s3 cp densenet_model.tar.gz s3://dry-bean-bucket-c/models/model.tar.gz --pro
 
 <img width="1414" alt="image" src="https://github.com/user-attachments/assets/4882fef8-311d-4d49-832d-28ffbd44011a">
 
+## 6. IAM Role/Policies
 
-## 6. Chalice Project Creation
+<img width="1301" alt="image" src="https://github.com/user-attachments/assets/f92724da-2a9f-4e7f-b1d1-fcfadb14355b">
+
+```json
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": "s3:GetObject",
+			"Resource": [
+				"arn:aws:s3:::dry-bean-bucket/*",
+				"arn:aws:s3:::dry-bean-bucket/densenet_onnx/*"
+			]
+		}
+	]
+}
+```
+
+## 7. Chalice Project Creation
 ```
  chalice new-project triton-app
 ```
@@ -106,7 +125,7 @@ aws s3 cp densenet_model.tar.gz s3://dry-bean-bucket-c/models/model.tar.gz --pro
 }
 ```
 
-### 7. app.py
+### 8. app.py
 ```python
 from chalice import Chalice, BadRequestError
 import boto3
@@ -160,7 +179,7 @@ def predict():
 
 ```
 
-## 8. chalice deploy --profile local
+## 9. chalice deploy --profile local
 ```bash
     The LAMBDA will be created and also the endpoint
     (.venv) (base) MacBook-Pro triton-app % chalice deploy --profile local     
@@ -177,7 +196,7 @@ def predict():
 
 <img width="822" alt="image" src="https://github.com/user-attachments/assets/0bef6172-f1fd-45ef-939f-3f91aa8acbaf">
 
-## 9. To Test
+## 10. To Test
 ```python
 
 root@docker-desktop:/opt/tritonserver# cat tclient.py
