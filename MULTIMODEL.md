@@ -1,4 +1,4 @@
-# Triton Server Setup and Multi Model Deployment in AWS Sagemaker
+# NVIDIA Triton Server Setup and Multi Model Deployment in AWS Sagemaker
 
 This guide provides step-by-step instructions for setting up the Triton Inference Server, packaging a model, and deploying it.
 
