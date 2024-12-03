@@ -68,4 +68,19 @@ drwxr-xr-x  0 whatever admin       0 Dec  2 19:52 ./densenet_onnx/1/
 aws s3 cp densenet_model.tar.gz s3://dry-bean-bucket-c/models/model.tar.gz --profile local
 ```
 
+## 3. Create the Model in SageMaker
+
+<img width="1332" alt="image" src="https://github.com/user-attachments/assets/a4d82e5c-80c0-469a-a819-17357932c515">
+
+## 4. Create the Endpoint Configuration ( make sure the instance type is ml.g4dn.xlarge )
+
+<img width="1378" alt="image" src="https://github.com/user-attachments/assets/827d6c79-85d1-4982-929c-2b2028823d0d">
+
+
+
+
+
+
+
+
 
