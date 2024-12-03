@@ -93,7 +93,7 @@ aws s3 cp densenet_model.tar.gz s3://dry-bean-bucket-c/models/model.tar.gz --pro
 			"Action": "s3:GetObject",
 			"Resource": [
 				"arn:aws:s3:::dry-bean-bucket/*",
-				"arn:aws:s3:::dry-bean-bucket/densenet_onnx/*"
+				"arn:aws:s3:::dry-bean-bucket/models/*"
 			]
 		}
 	]
