@@ -154,7 +154,7 @@ def predict():
 chalice deploy --profile local
 ```
 
-## 6. Testing
+## 6. Testing ( Refer: https://github.com/dochristy/triton-test/blob/main/README.md, for example, how to wget img1.jpg )
 
 ### Test Client Implementation
 ```python
