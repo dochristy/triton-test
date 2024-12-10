@@ -140,6 +140,26 @@ When the model is needed for predictions or further training, it can be decrypte
     openssl dgst -sha256 -verify public_key.pem -signature model.sig model.bin
 ```
 
+## Load Balancer WAF
+- Popular Load Balancer WAF Solutions:
+- AWS Elastic Load Balancing (ELB) with AWS WAF.
+
+## API Gateway Authentication and Rate Limiting
+### Authentication
+```bash
+GET /api/data
+Host: api.example.com
+Authorization: ApiKey 12345ABCDE
+```
+### Rate Limiting
+```bash
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+{
+  "error": "Rate limit exceeded. Try again later."
+}
+```
+
 
 
   
