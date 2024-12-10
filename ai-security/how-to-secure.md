@@ -159,20 +159,15 @@ Content-Type: application/json
   "error": "Rate limit exceeded. Try again later."
 }
 ```
-## Pod Security Standards
-### Example of applying Pod Security Standards (PSS) in a namespace:
-```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: my-secure-namespace
-  labels:
-    pod-security.kubernetes.io/enforce: "restricted"  # You can set this to "baseline" or "privileged"
-    pod-security.kubernetes.io/audit: "restricted"
-    pod-security.kubernetes.io/warn: "baseline"
-```
+## Prevention Methods
+### External Threats
+- Model Theft: Encrypt model weights, use secure enclaves, and enforce strict access controls.
+- Data Poisoning: Validate and sanitize training data; monitor for anomalies in data sources.
+- Adversarial Attacks: Employ robust training techniques like adversarial training and input validation.
 
-
-
+### Attack Types
+- Memory Probing: Use memory encryption, secure enclaves, and prevent unauthorized access to hardware.
+- DoS Attacks: Leverage WAF, rate limiting, and scalable infrastructure like auto-scaling.
+- Parameter Tampering: Validate and sanitize input parameters, and enforce strict API schema checks.
 
   
