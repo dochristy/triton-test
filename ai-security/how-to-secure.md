@@ -128,7 +128,17 @@ When the model is needed for predictions or further training, it can be decrypte
     
     print("Backup completed successfully!")
 ```
-
+## Signing Keys: Cryptographic Signing of Model Artifacts
+- Create a Pair of Keys:
+- Use tools like OpenSSL or HSM (Hardware Security Module) to generate a public-private key pair.
+- Sign the Model Artifact: ( This command generates a signature (model.sig) for the model file (model.bin) using the private key. )
+```bash
+    openssl dgst -sha256 -sign private_key.pem -out model.sig model.bin
+```
+- Verify the Signature: ( This checks if the signature matches the model file using the public key. )
+```bash
+    openssl dgst -sha256 -verify public_key.pem -signature model.sig model.bin
+```
 
 
 
