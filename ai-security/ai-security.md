@@ -216,6 +216,43 @@ Our security architecture focuses on four key aspects of AI model security:
    - Set up PII detection
 
 
+# Input Validation
+
+Input validation is a critical process in ensuring the security and integrity of an application by verifying the input data's format, type, and size. Below are the key aspects of input validation:
+
+## Schema Validation (IV1)
+
+- **Definition**: Ensures that input data conforms to a predefined structure or format.
+- **Example**: Validating that a JSON payload has required fields like `name` (string) and `age` (integer).
+- **Purpose**: Prevents malformed data from entering the system.
+
+## Data Type Check (IV2)
+
+- **Definition**: Verifies that the data type of input values matches expectations.
+- **Example**: Ensuring a `price` field is a float and not a string or array.
+- **Purpose**: Reduces the risk of errors or exploitation due to unexpected types.
+
+## Range Check (IV3)
+
+- **Definition**: Validates that numeric or date inputs fall within an acceptable range.
+- **Example**: Ensuring a temperature input is between -50°C and 50°C.
+- **Purpose**: Prevents invalid or out-of-bound data that could lead to errors or exploits.
+
+## Sanitization (IV4)
+
+- **Definition**: Cleans or escapes input data to remove malicious content.
+- **Example**: Stripping out SQL injection attempts like `'; DROP TABLE users;--` from a text input.
+- **Purpose**: Protects against injection attacks (e.g., SQL, XSS).
+
+## Size Limits (IV5)
+
+- **Definition**: Restricts the maximum size of input data to avoid excessive resource usage.
+- **Example**: Limiting an uploaded file to 5 MB or a text input to 255 characters.
+- **Purpose**: Prevents DoS attacks or memory exhaustion from overly large inputs.
+
+---
+
+
 # Processing and Output Validation
 
 This document provides an overview of key processes and validation steps involved in model predictions, ensuring effective data handling and secure outputs.
