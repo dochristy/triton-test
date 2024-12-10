@@ -33,8 +33,12 @@ Our security architecture focuses on four key aspects of AI model security:
 
     subgraph Production Environment
     subgraph Sagemaker
-        LB[Load Balancer\nWAF]
-        API[API Gateway\nAuth/Rate Limiting]
+        LB[Load Balancer
+            WAF]
+        API[API Gateway
+            Auth/Rate Limiting]
+        Lambda[Lambda Function
+               Processing]
         MS[Model Server]
         MT[Model Monitor]
     end
@@ -47,8 +51,10 @@ Our security architecture focuses on four key aspects of AI model security:
     DC --> SK
     SK --> LB
     LB --> API
-    API --> MS
+    API --> Lambda
+    Lambda --> MS
     MS --> MT
+
 
    ```
 
