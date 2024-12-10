@@ -103,7 +103,32 @@ When the model is needed for predictions or further training, it can be decrypte
     capabilities = ["deny"]
   }
 ```
-  
+
+## Supports Key Rotation and Automated Backup Procedures
+- Key rotation and automated backups are supported to ensure that model artifacts are always protected. Regular key rotation mitigates the risks associated with key compromise, and automated backups ensure that artifacts can be restored in case of data loss.
+
+## Key Rotation Example:
+```python
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+    import os
+    
+    # Generate a new key for key rotation
+    new_key = os.urandom(32)  # AES-256 new key
+    print("New key generated:", new_key)
+    
+    # Example of rotating the key for model encryption
+    # Store the new key securely, and update it in the system where it is used for model encryption
+```
+## Automated Backup Example:
+```python
+    import shutil
+    
+    # Copy encrypted model weights to a backup directory
+    shutil.copy('encrypted_model_weights.bin', '/path/to/backup/directory/encrypted_model_weights_backup.bin')
+    
+    print("Backup completed successfully!")
+```
+
 
 
 
