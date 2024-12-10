@@ -20,14 +20,17 @@ Our security architecture focuses on four key aspects of AI model security:
    ```mermaid
     flowchart LR
         subgraph Private Network
-            MA[Model Artifacts\nEncrypted Storage]
-            MR[Model Registry\nVersioning Control]
-            KC[Key Management\nService]
+            MA[Model Artifacts
+               Encrypted Storage]
+            MR[Model Registry
+               Versioning Control]
+            KC[Key Management
+               Service]
         end
 
     subgraph Deployment Pipeline
         SV[Security Validation]
-        DC[Docker Container\nHardening]
+        DC[Docker Container Hardening]
         SK[Signing Keys]
     end
 
@@ -60,7 +63,7 @@ Our security architecture focuses on four key aspects of AI model security:
 
 2. **Attack Vectors During Inference**
    ```mermaid
-   flowchart TD
+   flowchart LR
        subgraph External Threats
            AT1[Model Theft]
            AT2[Data Poisoning]
@@ -211,6 +214,65 @@ Our security architecture focuses on four key aspects of AI model security:
    - Implement sanitization rules
    - Configure output filtering
    - Set up PII detection
+
+
+# Processing and Output Validation
+
+This document provides an overview of key processes and validation steps involved in model predictions, ensuring effective data handling and secure outputs.
+
+---
+
+## Processing
+
+### Feature Extraction (P1)
+
+- **Definition**: Transforms raw input data into a structured format that the model can interpret.
+- **Example**: Converting a sentence into numerical embeddings or extracting edges from an image.
+- **Purpose**: Enhances the model's ability to understand and process input effectively.
+
+### Normalization (P2)
+
+- **Definition**: Scales input data to a consistent range or format.
+- **Example**: Scaling pixel values of an image between 0 and 1 or standardizing numerical features to have a mean of 0 and standard deviation of 1.
+- **Purpose**: Improves model performance and prevents bias from unscaled inputs.
+
+### Model Inference (P3)
+
+- **Definition**: The process where the trained model predicts outcomes based on input data.
+- **Example**: A model predicting the category of an image as "cat" or "dog."
+- **Purpose**: Generates predictions or classifications from processed input data.
+
+---
+
+## Output Validation
+
+### Confidence Check (OV1)
+
+- **Definition**: Ensures that model predictions meet a certain confidence threshold before being accepted.
+- **Example**: Only returning a prediction if its confidence score is above 0.8.
+- **Purpose**: Reduces the risk of acting on uncertain or unreliable predictions.
+
+### Output Sanitization (OV2)
+
+- **Definition**: Cleans the model's output to remove harmful or unintended information.
+- **Example**: Stripping sensitive debug information or ensuring responses are safe for public display.
+- **Purpose**: Protects against data leakage or harmful outputs.
+
+### PII Detection (OV3)
+
+- **Definition**: Identifies and flags Personally Identifiable Information in the model’s output.
+- **Example**: Detecting and masking email addresses or phone numbers in the response.
+- **Purpose**: Ensures compliance with privacy regulations and prevents exposing sensitive data.
+
+### Response Filtering (OV4)
+
+- **Definition**: Filters the model's output to meet predefined safety or content guidelines.
+- **Example**: Blocking offensive language or limiting responses to exclude controversial topics.
+- **Purpose**: Ensures the output aligns with ethical and regulatory standards.
+
+---
+
+By combining effective processing techniques with robust output validation mechanisms, this framework ensures accurate, reliable, and secure results from machine learning models.
 
 ## Contributing
 
