@@ -159,6 +159,19 @@ Content-Type: application/json
   "error": "Rate limit exceeded. Try again later."
 }
 ```
+## Pod Security Standards
+### Example of applying Pod Security Standards (PSS) in a namespace:
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-secure-namespace
+  labels:
+    pod-security.kubernetes.io/enforce: "restricted"  # You can set this to "baseline" or "privileged"
+    pod-security.kubernetes.io/audit: "restricted"
+    pod-security.kubernetes.io/warn: "baseline"
+```
+
 
 
 
