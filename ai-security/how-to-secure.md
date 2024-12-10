@@ -170,4 +170,45 @@ Content-Type: application/json
 - DoS Attacks: Leverage WAF, rate limiting, and scalable infrastructure like auto-scaling.
 - Parameter Tampering: Validate and sanitize input parameters, and enforce strict API schema checks.
 
+
+# Input Validation Aspects
+
+Input validation is a critical process in ensuring the security and integrity of an application by verifying the input data's format, type, and size. Below are the key aspects of input validation:
+
+## Schema Validation (IV1)
+
+- **Definition**: Ensures that input data conforms to a predefined structure or format.
+- **Example**: Validating that a JSON payload has required fields like `name` (string) and `age` (integer).
+- **Purpose**: Prevents malformed data from entering the system.
+
+## Data Type Check (IV2)
+
+- **Definition**: Verifies that the data type of input values matches expectations.
+- **Example**: Ensuring a `price` field is a float and not a string or array.
+- **Purpose**: Reduces the risk of errors or exploitation due to unexpected types.
+
+## Range Check (IV3)
+
+- **Definition**: Validates that numeric or date inputs fall within an acceptable range.
+- **Example**: Ensuring a temperature input is between -50°C and 50°C.
+- **Purpose**: Prevents invalid or out-of-bound data that could lead to errors or exploits.
+
+## Sanitization (IV4)
+
+- **Definition**: Cleans or escapes input data to remove malicious content.
+- **Example**: Stripping out SQL injection attempts like `'; DROP TABLE users;--` from a text input.
+- **Purpose**: Protects against injection attacks (e.g., SQL, XSS).
+
+## Size Limits (IV5)
+
+- **Definition**: Restricts the maximum size of input data to avoid excessive resource usage.
+- **Example**: Limiting an uploaded file to 5 MB or a text input to 255 characters.
+- **Purpose**: Prevents DoS attacks or memory exhaustion from overly large inputs.
+
+---
+
+By implementing these input validation aspects, developers can build robust systems that handle data securely and mitigate risks associated with invalid or malicious inputs.
+
+
+
   
