@@ -33,7 +33,7 @@ Our security architecture focuses on four key aspects of AI model security:
        
        subgraph Production Environment
            LB[Load Balancer\nWAF]
-           API[API Gateway\nAuth/Rate Limiting]
+           API[API Gateway\n Auth/Rate Limiting]
            subgraph Kubernetes Cluster
                PS[Pod Security Policy]
                MS[Model Server]
