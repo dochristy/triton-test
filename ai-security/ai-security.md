@@ -20,20 +20,26 @@ Our security architecture focuses on four key aspects of AI model security:
    ```mermaid
    flowchart LR
        subgraph Private Network
-           MA[Model Artifacts\nEncrypted Storage]
-           MR[Model Registry\nVersioning Control]
-           KC[Key Management\nService]
+           MA[Model Artifacts
+              Encrypted Storage]
+           MR[Model Registry
+              Versioning Control]
+           KC[Key Management
+               Service]
        end
        
        subgraph Deployment Pipeline
            SV[Security Validation]
-           DC[Docker Container\nHardening]
+           DC[Docker Container
+               Hardening]
            SK[Signing Keys]
        end
        
        subgraph Production Environment
-           LB[Load Balancer\nWAF]
-           API[API Gateway\n Auth/Rate Limiting]
+           LB[Load Balancer
+                 WAF]
+           API[API Gateway
+               Auth/Rate Limiting]
            subgraph Kubernetes Cluster
                PS[Pod Security Policy]
                MS[Model Server]
