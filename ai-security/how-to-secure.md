@@ -171,6 +171,47 @@ Content-Type: application/json
 - Parameter Tampering: Validate and sanitize input parameters, and enforce strict API schema checks.
 
 
+
+**Input/Output Validation Flow**
+   ```mermaid
+   flowchart LR
+       subgraph Input Validation
+           IV1[Schema Validation]
+           IV2[Data Type Check]
+           IV3[Range Check]
+           IV4[Sanitization]
+           IV5[Size Limits]
+       end
+       
+       subgraph Processing
+           P1[Feature Extraction]
+           P2[Normalization]
+           P3[Model Inference]
+       end
+       
+       subgraph Output Validation
+           OV1[Confidence Check]
+           OV2[Output Sanitization]
+           OV3[PII Detection]
+           OV4[Response Filtering]
+       end
+       
+       Input --> IV1
+       IV1 --> IV2
+       IV2 --> IV3
+       IV3 --> IV4
+       IV4 --> IV5
+       IV5 --> P1
+       P1 --> P2
+       P2 --> P3
+       P3 --> OV1
+       OV1 --> OV2
+       OV2 --> OV3
+       OV3 --> OV4
+       OV4 --> Output
+   ```
+
+
 # Input Validation
 
 Input validation is a critical process in ensuring the security and integrity of an application by verifying the input data's format, type, and size. Below are the key aspects of input validation:
