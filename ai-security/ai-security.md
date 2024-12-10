@@ -41,7 +41,7 @@ Our security architecture focuses on four key aspects of AI model security:
            API[API Gateway
                Auth/Rate Limiting]
            subgraph Kubernetes Cluster
-               PS[Pod Security Policy]
+               PS[Pod Security Standards]
                MS[Model Server]
                MT[Model Monitor]
            end
