@@ -216,6 +216,69 @@ Our security architecture focuses on four key aspects of AI model security:
    - Set up PII detection
 
 
+
+# Network and Runtime Security Overview
+
+This document outlines key security features and their purposes in both network security and runtime protection for systems and applications.
+
+## Network Security
+
+### 1. Firewall Rules (FW)
+- **Definition**: Configurations that define which network traffic is allowed or blocked based on security rules.
+- **Example**: Permitting traffic only from trusted IP ranges or blocking specific ports.
+- **Purpose**: Acts as a first line of defense against unauthorized access and malicious traffic.
+
+### 2. Intrusion Prevention (IPS)
+- **Definition**: Systems that monitor network traffic for suspicious activities and actively block detected threats.
+- **Example**: Identifying and blocking a SQL injection attempt in incoming HTTP traffic.
+- **Purpose**: Protects the system by preventing known attack patterns from breaching the network.
+
+### 3. TLS Encryption (SSL)
+- **Definition**: Encrypts data exchanged between clients and servers to prevent interception and tampering.
+- **Example**: Using HTTPS for secure API communication.
+- **Purpose**: Ensures data confidentiality and integrity during transmission.
+
+## Runtime Protection
+
+### 1. Rate Limiting (RB)
+- **Definition**: Restricts the number of requests a client can make within a given time period.
+- **Example**: Limiting API calls to 100 requests per minute per user.
+- **Purpose**: Prevents abuse, such as denial-of-service (DoS) attacks or resource exhaustion.
+
+### 2. Input Validation (IP)
+- **Definition**: Verifies that input data conforms to expected formats, types, and ranges.
+- **Example**: Ensuring a user ID field is an integer within a valid range.
+- **Purpose**: Blocks malicious input that could compromise the application.
+
+### 3. Model Telemetry (MT)
+- **Definition**: Collects and monitors performance metrics and operational data of the deployed model.
+- **Example**: Logging latency, accuracy, and errors during model inference.
+- **Purpose**: Provides insights for troubleshooting and ensuring model reliability.
+
+### 4. Anomaly Detection (AD)
+- **Definition**: Identifies unusual or unexpected patterns in system behavior that could indicate an attack or malfunction.
+- **Example**: Detecting a sudden surge in failed login attempts.
+- **Purpose**: Alerts administrators to potential security breaches or performance issues.
+
+---
+
+## Purpose
+
+These security measures are designed to ensure the safety, confidentiality, and performance integrity of systems, particularly in handling user interactions, data transmissions, and network communications. They help in mitigating risks associated with unauthorized access, malicious activity, and performance degradation.
+
+---
+
+## Usage
+
+To implement these security measures, consider applying appropriate configurations for firewalls, intrusion detection systems, and rate limits. Additionally, regular telemetry and anomaly detection should be employed to monitor the system's health and ensure that performance metrics remain optimal.
+
+
+
+
+
+
+
+
 # Input Validation
 
 Input validation is a critical process in ensuring the security and integrity of an application by verifying the input data's format, type, and size. Below are the key aspects of input validation:
