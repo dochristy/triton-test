@@ -217,7 +217,7 @@ Our security architecture focuses on four key aspects of AI model security:
 
 
 
-# Network and Runtime Security Overview
+## Network and Runtime Security Overview
 
 This document outlines key security features and their purposes in both network security and runtime protection for systems and applications.
 
@@ -279,7 +279,7 @@ To implement these security measures, consider applying appropriate configuratio
 
 
 
-# Input Validation
+## Input Validation
 
 Input validation is a critical process in ensuring the security and integrity of an application by verifying the input data's format, type, and size. Below are the key aspects of input validation:
 
@@ -316,7 +316,7 @@ Input validation is a critical process in ensuring the security and integrity of
 ---
 
 
-# Processing and Output Validation
+## Processing and Output Validation
 
 This document provides an overview of key processes and validation steps involved in model predictions, ensuring effective data handling and secure outputs.
 
