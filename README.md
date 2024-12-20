@@ -113,7 +113,7 @@ preprocess = transforms.Compose([
 client = httpclient.InferenceServerClient(url="localhost:8000")
 ```
 
-client.py
+client.py ( https )
 ```python
 import numpy as np
 import tritonclient.http as httpclient
@@ -152,6 +152,44 @@ results = client.infer(model_name="densenet_onnx", inputs=[inputs], outputs=[out
 inference_output = results.as_numpy("fc6_1").astype(str)
 
 print(np.squeeze(inference_output)[:5])
+```
+
+client.py ( gRPC )
+```python
+    import numpy as np
+    import tritonclient.grpc as grpcclient
+    from PIL import Image
+    from torchvision import transforms
+    
+    # preprocessing function remains the same
+    def rn50_preprocess(img_path="img1.jpg"):
+        img = Image.open(img_path)
+        preprocess = transforms.Compose(
+            [
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ]
+        )
+        return np.expand_dims(preprocess(img).numpy(), axis=0)
+    
+    transformed_img = rn50_preprocess()
+    
+    # Setting up gRPC client
+    client = grpcclient.InferenceServerClient(url="localhost:8001")  # Note the port change to 8001
+    
+    # Create input tensor
+    inputs = grpcclient.InferInput("data_0", transformed_img.shape, datatype="FP32")
+    inputs.set_data_from_numpy(transformed_img)
+    
+    # Create output tensor
+    outputs = grpcclient.InferRequestedOutput("fc6_1")
+    
+    # Querying the server
+    results = client.infer(model_name="densenet_onnx", inputs=[inputs], outputs=[outputs])
+    inference_output = results.as_numpy("fc6_1").astype(str)
+    print(np.squeeze(inference_output)[:5])
 ```
 
 
