@@ -281,6 +281,42 @@ Prediction results:
 
 
 
+```Makefile
+# Makefile for automating AWS ECR workflow
+
+PROFILE=local
+REGION=us-east-1
+REPO_NAME=triton-repo
+TAG=24.11-py3
+
+# Get the AWS account ID
+ACCOUNT_ID=$(shell aws sts get-caller-identity --profile $(PROFILE) --query "Account" --output text)
+
+# Define the ECR repository URL
+ECR_URL=$(ACCOUNT_ID).dkr.ecr.$(REGION).amazonaws.com/$(REPO_NAME):$(TAG)
+
+.PHONY: login
+login:
+	@echo "Logging into AWS ECR..."
+	aws ecr get-login-password --region $(REGION) --profile $(PROFILE) | \
+	docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(REGION).amazonaws.com
+
+.PHONY: create-repo
+create-repo:
+	@echo "Creating the ECR repository $(REPO_NAME)..."
+	aws ecr describe-repositories --repository-names $(REPO_NAME) --region $(REGION) --profile $(PROFILE) || \
+	aws ecr create-repository --repository-name $(REPO_NAME) --region $(REGION) --profile $(PROFILE)
+
+.PHONY: push-image
+push-image:
+	@echo "Pushing the Docker image to $(ECR_URL)..."
+	docker push $(ECR_URL)
+
+.PHONY: build-and-push
+build-and-push: login create-repo push-image
+	@echo "Image has been pushed to AWS ECR: $(ECR_URL)"
+```
+
 
 
 
