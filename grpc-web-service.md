@@ -136,10 +136,17 @@ if __name__ == "__main__":
     print(f"Testing API at: {url}")
     test_api(url, api_key)
 ```
+```shell
+chalice deploy --profile local
+```
+
+<img width="1771" alt="image" src="https://github.com/user-attachments/assets/1452c1e3-3f50-44d4-8506-609c68006ec6" />
+
+
 
 Testing:
 ```shell
-(base) whatever@Angelines-MacBook-Pro grpc-web-chalice % python3 test.py
+(base) grpc-web-chalice % python3 test.py
 Testing API at:  https://wwj1c1ue38.execute-api.us-east-1.amazonaws.com/api
 
 Testing base endpoint...
