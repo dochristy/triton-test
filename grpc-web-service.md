@@ -244,14 +244,13 @@ root@b11306b9aff5:/app#
 
 Testing:
 ```shell
-(base) grpc-web-chalice % python3 test.py
-Testing API at:  https://wwj1c1ue38.execute-api.us-east-1.amazonaws.com/api
+(base) whatever@Angelines-MacBook-Pro grpc-dec-28 % curl --location 'https://5zfqodutl8.execute-api.us-east-1.amazonaws.com/api/sayhello' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: weMt1YrCdpiVSHzbmUtx686Q1Av3TomapK91tKr2' \
+--data '{
+    "name": "Abel to integrate chalice"
+}'
 
-Testing base endpoint...
-Base endpoint status: 200
-Response: {"hello":"world"}
+{"message":"Hello, Abel to integrate chalice"}%  
 
-Testing greet endpoint...
-Greet endpoint status: 200
-Response: {"message":"Hello, John!"}
 ```
