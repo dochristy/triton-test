@@ -1,3 +1,43 @@
+```flowchart LR
+    subgraph AWS Cloud
+        subgraph VPC
+            EC2[EC2 Instance\nPort 50051\ngRPC Server]
+            SG1[Security Group\nInbound: 50051]
+        end
+        
+        subgraph API Gateway & Lambda
+            API[API Gateway] --> Lambda
+            Lambda[Lambda Function\ngRPC Client] --> |gRPC calls| EC2
+            SG2[Security Group\nOutbound: 50051]
+        end
+    end
+    
+    Client[HTTP Client] -->|HTTP POST /sayhello| API
+    
+    %% Add security group connection
+    SG2 -.->|Allows traffic| SG1
+    
+    %% Add notes
+    classDef note fill:#fff,stroke:#333,stroke-dasharray: 5 5
+    
+    note1[Docker container running\ngRPC server implementation]
+    EC2 --- note1
+    
+    note2[Chalice app with\ngRPC client stub]
+    Lambda --- note2
+    
+    class note1,note2 note
+```
+
+
+
+
+
+
+
+
+
+
 ```
 grpc-chalice
 ├── Dockerfile
