@@ -1,32 +1,49 @@
-```flowchart LR
+```mermaid
+flowchart LR
+    %% Define styles with black text
+    classDef client fill:#90EE90,stroke:#000,stroke-width:2px,color:#000
+    classDef apiGateway fill:#87CEEB,stroke:#000,stroke-width:2px,color:#000
+    classDef lambda fill:#FFB6C1,stroke:#000,stroke-width:2px,color:#000
+    classDef ec2 fill:#DDA0DD,stroke:#000,stroke-width:2px,color:#000
+    classDef sg fill:#F0E68C,stroke:#000,stroke-width:2px,color:#000
+    classDef note fill:#FFE4B5,stroke:#000,stroke-width:2px,stroke-dasharray: 5 5,color:#000
+    classDef vpc fill:transparent,stroke:#000,stroke-width:2px,color:#000
+    classDef cloud fill:transparent,stroke:#000,stroke-width:2px,color:#000
+
     subgraph AWS Cloud
         subgraph VPC
-            EC2[EC2 Instance\nPort 50051\ngRPC Server]
-            SG1[Security Group\nInbound: 50051]
+            EC2[EC2 Instance Port 50051\ngRPC Server]
+            SG1[Security Group Inbound: 50051]
         end
         
         subgraph API Gateway & Lambda
             API[API Gateway] --> Lambda
-            Lambda[Lambda Function\ngRPC Client] --> |gRPC calls| EC2
-            SG2[Security Group\nOutbound: 50051]
+            Lambda[Lambda Function gRPC Client] --> |gRPC calls| EC2
+            SG2[Security Group Outbound: 50051]
         end
     end
     
     Client[HTTP Client] -->|HTTP POST /sayhello| API
     
-    %% Add security group connection
+    %% Add security group connection with black text
     SG2 -.->|Allows traffic| SG1
     
-    %% Add notes
-    classDef note fill:#fff,stroke:#333,stroke-dasharray: 5 5
-    
-    note1[Docker container running\ngRPC server implementation]
+    %% Add notes with black text
+    note1[Docker container running gRPC server implementation]
     EC2 --- note1
     
-    note2[Chalice app with\ngRPC client stub]
+    note2[Chalice app with gRPC client stub]
     Lambda --- note2
     
+    %% Apply styles
+    class Client client
+    class API apiGateway
+    class Lambda lambda
+    class EC2 ec2
+    class SG1,SG2 sg
     class note1,note2 note
+    class VPC vpc
+    class AWS cloud
 ```
 
 
