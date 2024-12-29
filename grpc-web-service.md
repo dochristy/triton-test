@@ -248,9 +248,9 @@ Testing:
 --header 'Content-Type: application/json' \
 --header 'x-api-key: weMt1YrCdpiVSHzbmUtx686Q1Av3TomapK91tKr2' \
 --data '{
-    "name": "Abel to integrate chalice"
+    "name": "Able to integrate chalice"
 }'
 
-{"message":"Hello, Abel to integrate chalice"}%  
+{"message":"Hello, Able to integrate chalice"}%  
 
 ```
