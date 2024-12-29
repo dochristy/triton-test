@@ -173,6 +173,63 @@ CMD ["python", "server.py"]
 chalice deploy --profile local
 ```
 
+```shell
+ubuntu@ip-172-31-18-96:~$ docker run -p 50051:50051 123456789.dkr.ecr.us-east-1.amazonaws.com/grpc-hello-service:latest
+```
+
+<img width="1083" alt="image" src="https://github.com/user-attachments/assets/27beeb2d-6362-4756-be92-e500494fa5d9" />
+
+
+```shell
+
+ubuntu@ip-172-31-18-96:~$ docker exec -it b11306b9aff5 /bin/bash
+root@b11306b9aff5:/app# ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 Dec28 ?        00:00:35 python server.py
+root         201       0  0 Dec28 pts/0    00:00:00 /bin/bash
+root         692       1  0 Dec28 pts/0    00:00:00 [python3.12] <defunct>
+root         817       0  0 05:03 pts/1    00:00:00 /bin/bash
+root         823     817  0 05:03 pts/1    00:00:00 ps -ef
+root@b11306b9aff5:/app# cat server.py
+import grpc
+from concurrent import futures
+import greeting_pb2
+import greeting_pb2_grpc
+from grpc_reflection.v1alpha import reflection
+
+# Define the service implementation
+class Greeter(greeting_pb2_grpc.GreeterServicer):
+    def SayHello(self, request, context):
+        # Return a HelloReply message
+        return greeting_pb2.HelloReply(message=f"Hello {request.name}!")
+
+# Initialize the server
+def serve():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    greeting_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
+
+    # Enable reflection for the server
+    SERVICE_NAMES = (
+        greeting_pb2.DESCRIPTOR.services_by_name['Greeter'].full_name,
+    )
+    reflection.enable_server_reflection(SERVICE_NAMES, server)
+
+    server.add_insecure_port('[::]:50051')  # Bind to port 50051
+    server.start()
+    print('Server running on port 50051')
+    server.wait_for_termination()
+
+if __name__ == '__main__':
+    serve()
+
+root@b11306b9aff5:/app#
+```
+
+
+
+
+
+
 <img width="1771" alt="image" src="https://github.com/user-attachments/assets/1452c1e3-3f50-44d4-8506-609c68006ec6" />
 
 Testing:
