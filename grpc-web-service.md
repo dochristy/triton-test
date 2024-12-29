@@ -171,6 +171,16 @@ CMD ["python", "server.py"]
 
 ```shell
 chalice deploy --profile local
+
+Creating deployment package.
+Updating policy for IAM role: grpc-chalice-dev
+Updating lambda function: grpc-chalice-dev
+Updating rest API
+Resources deployed:
+  - Lambda ARN: arn:aws:lambda:us-east-1:396608797019:function:grpc-chalice-dev
+  - Rest API URL: https://5zfqodutl9.execute-api.us-east-1.amazonaws.com/api/
+
+
 ```
 
 ```shell
