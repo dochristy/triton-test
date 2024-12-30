@@ -62,6 +62,38 @@ docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
     tritonserver --model-repository=/models
 ```
 
+Output:
+```shell
++---------------+---------+--------+
+| densenet_onnx | 1       | READY  |
++---------------+---------+--------+
+
+I1230 18:50:38.591278 1 metrics.cc:783] "Collecting CPU metrics"
+I1230 18:50:38.592349 1 tritonserver.cc:2598] 
++----------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Option                           | Value                                                                                                                                                                                                           |
++----------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| server_id                        | triton                                                                                                                                                                                                          |
+| server_version                   | 2.52.0                                                                                                                                                                                                          |
+| server_extensions                | classification sequence model_repository model_repository(unload_dependents) schedule_policy model_configuration system_shared_memory cuda_shared_memory binary_tensor_data parameters statistics trace logging |
+| model_repository_path[0]         | /models                                                                                                                                                                                                         |
+| model_control_mode               | MODE_NONE                                                                                                                                                                                                       |
+| strict_model_config              | 0                                                                                                                                                                                                               |
+| model_config_name                |                                                                                                                                                                                                                 |
+| rate_limit                       | OFF                                                                                                                                                                                                             |
+| pinned_memory_pool_byte_size     | 268435456                                                                                                                                                                                                       |
+| min_supported_compute_capability | 6.0                                                                                                                                                                                                             |
+| strict_readiness                 | 1                                                                                                                                                                                                               |
+| exit_timeout                     | 30                                                                                                                                                                                                              |
+| cache_enabled                    | 0                                                                                                                                                                                                               |
++----------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+I1230 18:50:38.623218 1 grpc_server.cc:2558] "Started GRPCInferenceService at 0.0.0.0:8001"
+I1230 18:50:38.623516 1 http_server.cc:4729] "Started HTTPService at 0.0.0.0:8000"
+I1230 18:50:38.675787 1 http_server.cc:362] "Started Metrics Service at 0.0.0.0:8002"
+```
+
+
 This command:
 - Maps ports 8000 (HTTP), 8001 (gRPC), and 8002 (metrics)
 - Mounts your local models directory to the container
@@ -83,6 +115,29 @@ try:
     print(f"Model Metadata:\n{model_metadata}")
 except Exception as e:
     print(f"Error retrieving model metadata: {e}")
+```
+Ouptut:
+```shell
+Model Metadata:
+name: "densenet_onnx"
+versions: "1"
+platform: "onnxruntime_onnx"
+inputs {
+  name: "data_0"
+  datatype: "FP32"
+  shape: 1
+  shape: 3
+  shape: 224
+  shape: 224
+}
+outputs {
+  name: "fc6_1"
+  datatype: "FP32"
+  shape: 1
+  shape: 1000
+  shape: 1
+  shape: 1
+}
 ```
 
 ### Making Inference Requests
@@ -116,6 +171,24 @@ outputs = [grpcclient.InferRequestedOutput(output_name)]
 response = triton_client.infer(model_name=model_name, inputs=inputs, outputs=outputs)
 output_data = response.as_numpy(output_name)
 ```
+
+Output:
+```shell
+Successfully connected to Triton gRPC server.
+Model output shape: (1, 1000, 1, 1)
+Model output: [[[[-7.20373690e-01]]
+
+  [[-1.12943172e+00]]
+
+  [[ 1.50199365e-02]]
+
+  [[-1.18589258e+00]]
+
+  [[ 2.93440849e-01]]
+...
+...
+```
+
 
 ## Model Details
 
