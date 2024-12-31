@@ -211,6 +211,205 @@ Example response:
 }
 ```
 
+
+# For Multi Model
+```python
+from chalice import Chalice, Response
+import numpy as np
+import tritonclient.grpc as grpcclient
+from tritonclient.utils import np_to_triton_dtype
+
+app = Chalice(app_name='triton-grpc-app')
+
+# Server configuration
+TRITON_GRPC_URL = "ec2-xx-xx-xx-xx.compute-1.amazonaws.com:8001"
+
+# Model configurations
+MODEL_CONFIGS = {
+    "densenet": {
+        "name": "densenet_onnx",
+        "input_name": "data_0",
+        "output_name": "fc6_1",
+        "input_shape": [1, 3, 224, 224]
+    },
+    "resnet50": {
+        "name": "resnet50_onnx",
+        "input_name": "data",
+        "output_name": "resnetv24_dense0_fwd",
+        "input_shape": [1, 3, 224, 224]
+    },
+    "chrisnet": {
+        "name": "densenet_onnx",
+        "input_name": "data_0",
+        "output_name": "fc6_1",
+        "input_shape": [1, 3, 224, 224]
+    }
+}
+
+def preprocess_image(raw_input, shape):
+    """
+    Placeholder for image preprocessing.
+    In real application, this would handle actual image data.
+    """
+    return np.random.rand(*shape).astype(np.float32)
+
+@app.route('/infer/{model_type}', methods=['POST'])
+def infer(model_type):
+    if model_type not in MODEL_CONFIGS:
+        return Response(
+            body={'error': f'Model {model_type} not supported. Available models: {list(MODEL_CONFIGS.keys())}'},
+            status_code=400
+        )
+
+    try:
+        model_config = MODEL_CONFIGS[model_type]
+
+        # Initialize client
+        triton_client = grpcclient.InferenceServerClient(url=TRITON_GRPC_URL)
+
+        # Prepare input data
+        input_data = preprocess_image(None, model_config["input_shape"])
+        inputs = [
+            grpcclient.InferInput(
+                model_config["input_name"],
+                model_config["input_shape"],
+                np_to_triton_dtype(input_data.dtype)
+            )
+        ]
+        inputs[0].set_data_from_numpy(input_data)
+
+        # Define outputs
+        outputs = [grpcclient.InferRequestedOutput(model_config["output_name"])]
+
+        # Make inference request
+        response = triton_client.infer(
+            model_name=model_config["name"],
+            inputs=inputs,
+            outputs=outputs
+        )
+
+        output_data = response.as_numpy(model_config["output_name"])
+
+        return {
+            'status': 'success',
+            'model': model_type,
+            'output': output_data.tolist()
+        }
+
+    except Exception as e:
+        return Response(
+            body={
+                'status': 'error',
+                'model': model_type,
+                'message': str(e)
+            },
+            status_code=500
+        )
+
+@app.route('/models', methods=['GET'])
+def list_models():
+    try:
+        triton_client = grpcclient.InferenceServerClient(url=TRITON_GRPC_URL)
+        model_repository = triton_client.get_model_repository_index()
+        return {
+            'status': 'success',
+            'models': [model.name for model in model_repository.models]
+        }
+    except Exception as e:
+        return Response(
+            body={
+                'status': 'error',
+                'message': str(e)
+            },
+            status_code=500
+        )
+
+@app.route('/health', methods=['GET'])
+def health():
+    try:
+        triton_client = grpcclient.InferenceServerClient(url=TRITON_GRPC_URL)
+        if triton_client.is_server_live():
+            return {'status': 'healthy'}
+        return {'status': 'unhealthy'}
+    except Exception as e:
+        return {'status': 'unhealthy', 'error': str(e)}
+```
+
+S3 Structure
+```
+S3://YOUR_BUCKET/models
+
+tree models
+models
+├── chrisnet_onnx
+│   ├── 1
+│   │   ├── config.pbtxt
+│   │   └── model.onnx
+│   └── densenet_labels.txt
+├── densenet_onnx
+│   ├── 1
+│   │   ├── config.pbtxt
+│   │   └── model.onnx
+│   └── densenet_labels.txt
+└── resnet50_onnx
+    ├── 1
+    │   ├── config.pbtxt
+    │   └── model.onnx
+    └── resnet50_labels.txt
+```
+
+## API Usage
+
+### List Models
+```bash
+curl -X GET https://gm9b8nx3d7.execute-api.us-east-1.amazonaws.com/api/models \ 
+--header 'x-api-key: YOUR_API_KEY'  
+```
+
+Expected response:
+```json
+{"status":"success","models":["chrisnet_onnx","densenet_onnx","resnet50_onnx"]}
+```
+
+### Inference [ densenet ]
+```bash
+curl https://gm9b8nx3d7.execute-api.us-east-1.amazonaws.com/api/infer/densenet \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: YOUR_API_KEY' \
+--data '{
+    "name": "Test Job"
+}'
+```
+
+Example response:
+```json
+{
+    "status": "success",
+    "output": [[[-1.0031218528747559], [-0.9455380439758301], ...]]
+}
+```
+
+### Inference [ chrisnet ]
+
+```bash
+curl https://gm9b8nx3d7.execute-api.us-east-1.amazonaws.com/api/infer/chrisnet \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: YOUR_API_KEY' \
+--data '{
+    "name": "Test Job"
+}'
+```
+
+Example response:
+```json
+{
+    "status": "success",
+    "output": [[[-1.0031218528747559], [-0.9455380439758301], ...]]
+}
+```
+
+
+
 ## Security Features
 
 - API Gateway authentication using API keys
