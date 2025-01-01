@@ -723,6 +723,12 @@ Example response:
 
 
 
+
+<img width="1555" alt="image" src="https://github.com/user-attachments/assets/54e78a62-ab1f-4004-b4ac-9c9294a2f506" />
+
+
+
+
 ## Security Features
 
 - API Gateway authentication using API keys
