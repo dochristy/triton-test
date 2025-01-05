@@ -5,7 +5,7 @@ A complete solution for deploying NVIDIA Triton Inference Server on AWS EC2 with
 ## Architecture
 
 ```mermaid
-%%{init: {'theme': 'neutral', 'themeVariables': { 'fontFamily': 'arial', 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'edgeLabelBackground': '#ffffff'}}}%%
+%%{init: {'theme': 'neutral', 'themeVariables': { 'fontFamily': 'arial', 'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'lineColor': '#2d3436', 'edgeLabelBackground': '#ffffff'}}}%%
 flowchart LR
     Client[Client]
     API[API Gateway]
@@ -23,13 +23,13 @@ flowchart LR
     
     Client --> |HTTPS|API
     
-    style Client fill:#f5f5f5,stroke:#000000
-    style AWS fill:#f5f5f5,stroke:#000000
-    style API fill:#f5f5f5,stroke:#000000
-    style Lambda fill:#f5f5f5,stroke:#000000
-    style EC2 fill:#f5f5f5,stroke:#000000
-    style S3 fill:#f5f5f5,stroke:#000000
-    style ECR fill:#f5f5f5,stroke:#000000
+    style Client fill:#74b9ff,stroke:#0984e3,color:#000000
+    style AWS Cloud fill:#dfe6e9,stroke:#636e72,color:#000000
+    style API fill:#55efc4,stroke:#00b894,color:#000000
+    style Lambda fill:#ffeaa7,stroke:#fdcb6e,color:#000000
+    style EC2 fill:#81ecec,stroke:#00cec9,color:#000000
+    style S3 fill:#fab1a0,stroke:#e17055,color:#000000
+    style ECR fill:#a29bfe,stroke:#6c5ce7,color:#000000
 ```
 
 ## Prerequisites
