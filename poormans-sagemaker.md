@@ -473,7 +473,7 @@ Example response:
 }
 ```
 
-### Inference [ chrisnet ]
+### Inference [ resnet50 ]
 
 ```bash
 curl https://gm9b8nx3d7.execute-api.us-east-1.amazonaws.com/api/infer/resnet50 \
