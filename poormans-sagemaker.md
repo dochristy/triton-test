@@ -95,7 +95,16 @@ docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
     tritonserver --model-repository=s3://dry-bean-bucket-c/models
 ```
 
-## Project Structure
+
+
+### 3. Chalice Application Setup
+
+1. Create new project:
+```bash
+chalice new-project triton-grpc-app
+cd triton-grpc-app
+```
+### Project Structure
 
 ```
 triton-grpc-app/
@@ -105,13 +114,6 @@ triton-grpc-app/
     └── config.json
 ```
 
-### 3. Chalice Application Setup
-
-1. Create new project:
-```bash
-chalice new-project triton-grpc-app
-cd triton-grpc-app
-```
 
 2. Create requirements.txt:
 ```
