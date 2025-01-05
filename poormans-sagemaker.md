@@ -40,22 +40,33 @@ flowchart LR
 - Python 3.x
 - S3 bucket for model storage
 
-## Project Structure
 
-```
-models/
-└── densenet_onnx
-    ├── 1
-    │   ├── config.pbtxt
-    │   └── model.onnx
-    └── densenet_labels.txt
 
-triton-grpc-app/
-├── app.py
-├── requirements.txt
-└── .chalice/
-    └── config.json
+S3 Structure
 ```
+S3://dry-bean-bucket-c/
+
+dry-bean-bucket-c/
+├── models/                           # Model repository
+│   ├── densenet_onnx/               # First model
+│   │   ├── 1/                       # Model version
+│   │   │   ├── config.pbtxt         # Triton config file
+│   │   │   └── model.onnx           # Model file
+│   │   └── densenet_labels.txt      # Optional labels file
+│   └── resnet50_onnx/              # Second model
+│       ├── 1/                       # Model version
+│       │   ├── config.pbtxt         # Triton config file
+│       │   └── model.onnx           # Model file
+│       └── resnet50_labels.txt      # Optional labels file
+│
+├── images/                          # Directory for input images
+│   └── your_image.jpg              # Images to run inference on
+│
+└── results/                         # Where inference results are stored
+    └── images/
+        └── your_image.jpg_densenet_inference.json
+```
+
 
 ## Setup Instructions
 
@@ -82,6 +93,16 @@ docker push <account_id>.dkr.ecr.us-east-1.amazonaws.com/triton-grpc:24.11-py3
 docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
     <acct_id>.dkr.ecr.us-east-1.amazonaws.com/triton-grpc:24.11-py3 \
     tritonserver --model-repository=s3://dry-bean-bucket-c/models
+```
+
+## Project Structure
+
+```
+triton-grpc-app/
+├── app.py
+├── requirements.txt
+└── .chalice/
+    └── config.json
 ```
 
 ### 3. Chalice Application Setup
@@ -111,107 +132,7 @@ tritonclient[grpc]
   }
 }
 ```
-
-4. Create app.py:
-```python
-from chalice import Chalice
-import numpy as np
-import tritonclient.grpc as grpcclient
-from tritonclient.utils import np_to_triton_dtype
-
-app = Chalice(app_name='triton-grpc-app')
-
-# Server configuration
-TRITON_GRPC_URL = "ec2-xx-xx-xx-xx.compute-1.amazonaws.com:8001"  # Replace with your host
-MODEL_NAME = "densenet_onnx"
-INPUT_NAME = "data_0"
-OUTPUT_NAME = "fc6_1"
-INPUT_SHAPE = [1, 3, 224, 224]
-
-@app.route('/infer', methods=['POST'])
-def infer():
-    try:
-        # Initialize client
-        triton_client = grpcclient.InferenceServerClient(url=TRITON_GRPC_URL)
-
-        # Prepare input data
-        input_data = np.random.rand(*INPUT_SHAPE).astype(np.float32)
-        inputs = [
-            grpcclient.InferInput(INPUT_NAME, INPUT_SHAPE,
-                                  np_to_triton_dtype(input_data.dtype))
-        ]
-        inputs[0].set_data_from_numpy(input_data)
-
-        # Define outputs
-        outputs = [grpcclient.InferRequestedOutput(OUTPUT_NAME)]
-
-        # Make inference request
-        response = triton_client.infer(
-            model_name=MODEL_NAME,
-            inputs=inputs,
-            outputs=outputs
-        )
-
-        output_data = response.as_numpy(OUTPUT_NAME)
-
-        return {
-            'status': 'success',
-            'output': output_data.tolist()
-        }
-
-    except Exception as e:
-        return {
-            'status': 'error',
-            'message': str(e)
-        }
-
-@app.route('/health', methods=['GET'])
-def health():
-    try:
-        triton_client = grpcclient.InferenceServerClient(url=TRITON_GRPC_URL)
-        if triton_client.is_server_live():
-            return {'status': 'healthy'}
-        return {'status': 'unhealthy'}
-    except Exception as e:
-        return {'status': 'unhealthy', 'error': str(e)}
-```
-
-5. Deploy the application:
-```bash
-chalice deploy --profile local
-```
-
-## API Usage
-
-### Health Check
-```bash
-curl https://gm9b8nx3d8.execute-api.us-east-1.amazonaws.com/api/health
-```
-
-Expected response:
-```json
-{"status": "healthy"}
-```
-
-### Inference
-```bash
-curl https://gm9b8nx3d8.execute-api.us-east-1.amazonaws.com/api/infer \
---header 'Content-Type: application/json' \
---header 'x-api-key: YOUR_API_KEY' \
---data '{
-    "name": "Test inference"
-}'
-```
-
-Example response:
-```json
-{
-    "status": "success",
-    "output": [[[-1.0031218528747559], [-0.9455380439758301], ...]]
-}
-```
-
-
+4. app.py
 # For Multi Model without S3 Implementation
 ```python
 from chalice import Chalice, Response
@@ -334,31 +255,13 @@ def health():
     except Exception as e:
         return {'status': 'unhealthy', 'error': str(e)}
 ```
+   
 
-S3 Structure
+6. Deploy the application:
+```bash
+chalice deploy --profile local
 ```
-S3://dry-bean-bucket-c/
 
-dry-bean-bucket-c/
-├── models/                           # Model repository
-│   ├── densenet_onnx/               # First model
-│   │   ├── 1/                       # Model version
-│   │   │   ├── config.pbtxt         # Triton config file
-│   │   │   └── model.onnx           # Model file
-│   │   └── densenet_labels.txt      # Optional labels file
-│   └── resnet50_onnx/              # Second model
-│       ├── 1/                       # Model version
-│       │   ├── config.pbtxt         # Triton config file
-│       │   └── model.onnx           # Model file
-│       └── resnet50_labels.txt      # Optional labels file
-│
-├── images/                          # Directory for input images
-│   └── your_image.jpg              # Images to run inference on
-│
-└── results/                         # Where inference results are stored
-    └── images/
-        └── your_image.jpg_densenet_inference.json
-```
 
 # For MultiModel with S3 implementation
 ```python
