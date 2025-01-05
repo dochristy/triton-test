@@ -132,9 +132,7 @@ tritonclient[grpc]
   }
 }
 ```
-4. app.py
-
-For MultiModel with S3 implementation
+4. app.py ( For MultiModel with S3 implementation )
 ```python
 
 from chalice import Chalice, Response
