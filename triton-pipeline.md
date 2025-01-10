@@ -728,6 +728,76 @@ ENV PATH="/usr/local/bin:${PATH}"
 CMD ["bash", "-c", "tritonserver --model-repository=s3://dry-bean-bucket-c/models --http-port=8000 --grpc-port=8001 --metrics-port=8002 & python3 serve.py"]
 ```
 
+test_request.json
+```json
+{
+  "s3_key": "images/pexels-pixabay-45201.jpg"
+}
+```
+
+
+Build and run the Triton Image with the Pipeline:
+```bash
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account_id>.dkr.ecr.us-east-1.amazonaws.com
+docker build -t triton-pipeline .
+docker run -p 5000:5000 -p 8000:8000 -p 8001:8001 -p 8002:8002 -v ~/.aws:/root/.aws triton-pipeline
+```
+
+Sample Log Output:
+```bash
++-------------+-----------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Backend     | Path                                                            | Config                                                                                                                                                        |
++-------------+-----------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| onnxruntime | /opt/tritonserver/backends/onnxruntime/libtriton_onnxruntime.so | {"cmdline":{"auto-complete-config":"true","backend-directory":"/opt/tritonserver/backends","min-compute-capability":"6.000000","default-max-batch-size":"4"}} |
++-------------+-----------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+I0110 03:21:50.566950 95 server.cc:674] 
++---------------+---------+--------+
+| Model         | Version | Status |
++---------------+---------+--------+
+| chrisnet_onnx | 1       | READY  |
+| densenet_onnx | 1       | READY  |
+| resnet50_onnx | 1       | READY  |
++---------------+---------+--------+
+```
+To tail the logs:
+```bash
+docker logs -f d1b7
+```
+
+To run the pipeline:
+```bash
+curl -X POST -H "Content-Type: application/json"   -d '{"s3_key":"images/pexels-pixabay-45201.jpg"}'   --max-time 30 http://localhost:5000/predict
+```
+
+Sample log output:
+```bash
+INFO:__main__:Received prediction request at 1736479614.8651419
+INFO:__main__:Starting processing for S3 key: images/pexels-pixabay-45201.jpg
+INFO:__main__:Starting pipeline execution
+INFO:root:Loading image from S3: images/pexels-pixabay-45201.jpg
+INFO:pipeline:Loading image from S3: images/pexels-pixabay-45201.jpg
+INFO:root:Preprocessing image
+INFO:pipeline:Preprocessing image
+INFO:root:Running DenseNet inference
+INFO:pipeline:Processing with model: densenet_onnx
+INFO:root:Transforming DenseNet output
+INFO:pipeline:Transforming DenseNet output for ResNet input
+INFO:root:Running ResNet inference
+INFO:pipeline:Processing with model: resnet50_onnx
+INFO:root:Generating visualizations
+INFO:pipeline:Saved original image to visualization_outputs_20250110_032155/original_pexels-pixabay-45201.png
+INFO:pipeline:Saved preprocessing steps visualization to visualization_outputs_20250110_032155/preprocessing_steps.png
+/app/pipeline.py:188: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:206.)
+  tensor = torch.from_numpy(tensor)
+INFO:pipeline:Saved feature maps to visualization_outputs_20250110_032155/densenet_feature_maps.png
+INFO:pipeline:Saved feature maps to visualization_outputs_20250110_032155/resnet_feature_maps.png
+INFO:root:Pipeline completed successfully in 23.01 seconds
+INFO:__main__:Pipeline execution completed in 23.02 seconds
+INFO:__main__:Request completed in 23.21 seconds
+```
+
+
 ## Development and Testing
 
 1. Run with debug logging:
