@@ -1,4 +1,4 @@
-# Vision Pipeline with Triton Inference Server
+# Triton Pipeline with Triton Inference Server
 
 ## System Architecture
 
@@ -51,7 +51,7 @@ sequenceDiagram
 ## Project Structure
 
 ```
-vision-pipeline/
+triton-pipeline/
 ├── Dockerfile
 ├── requirements.txt
 ├── monitoring.py
@@ -74,25 +74,25 @@ vision-pipeline/
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd vision-pipeline
+cd triton-pipeline
 ```
 
 2. Create requirements.txt:
 ```
-tritonclient[all]
-Flask
-boto3
-Pillow
-torch
-torchvision
-matplotlib
-seaborn
-numpy
+flask==3.0.1
+boto3==1.34.11
+pillow==10.1.0
+torch==2.2.1
+torchvision==0.17.1
+tritonclient[all]==2.39.0
+numpy==1.26.3
+matplotlib==3.8.2
+seaborn==0.13.1
 ```
 
 3. Build the Docker image:
 ```bash
-docker build -t vision-pipeline .
+docker build -t triton-pipeline .
 ```
 
 4. Run the container:
@@ -101,7 +101,11 @@ docker run -p 5000:5000 -p 8000:8000 -p 8001:8001 -p 8002:8002 \
 -e AWS_ACCESS_KEY_ID=your_access_key \
 -e AWS_SECRET_ACCESS_KEY=your_secret_key \
 -e AWS_DEFAULT_REGION=us-east-1 \
-vision-pipeline
+triton-pipeline
+
+or
+
+docker run -p 5000:5000 -p 8000:8000 -p 8001:8001 -p 8002:8002 -v ~/.aws:/root/.aws triton-pipeline
 ```
 
 ## API Endpoints
