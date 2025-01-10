@@ -801,6 +801,40 @@ INFO:__main__:Pipeline execution completed in 23.02 seconds
 INFO:__main__:Request completed in 23.21 seconds
 ```
 
+The Output:
+```bash
+ubuntu@ip-172-31-39-161:~/image-build$ docker ps
+CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS          PORTS                                                                                                      NAMES
+d1b7e30375e6   triton-pipeline   "/opt/nvidia/nvidia_…"   35 minutes ago   Up 35 minutes   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp, 0.0.0.0:8000-8002->8000-8002/tcp, :::8000-8002->8000-8002/tcp   vibrant_bohr
+ubuntu@ip-172-31-39-161:~/image-build$ history | grep d1b7
+  450  history | grep d1b7
+ubuntu@ip-172-31-39-161:~/image-build$ docker exec -it d1b7 /bin/bash
+root@d1b7e30375e6:/app# ls -ltr
+total 36
+-rw-rw-r-- 1 root root   150 Jan  9 13:13 requirements.txt
+-rw-rw-r-- 1 root root  3245 Jan 10 02:54 monitoring.py
+-rw-rw-r-- 1 root root 11312 Jan 10 03:06 pipeline.py
+-rw-rw-r-- 1 root root  4449 Jan 10 03:20 serve.py
+drwxr-xr-x 2 root root  4096 Jan 10 03:21 __pycache__
+drwxr-xr-x 2 root root  4096 Jan 10 03:27 visualization_outputs_20250110_032155
+root@d1b7e30375e6:/app# cd visualization_outputs_20250110_032155/
+root@d1b7e30375e6:/app/visualization_outputs_20250110_032155# ls -ltr
+total 4444
+-rw-r--r-- 1 root root 2792369 Jan 10 03:27 original_pexels-pixabay-45201.png
+-rw-r--r-- 1 root root 1662203 Jan 10 03:27 preprocessing_steps.png
+-rw-r--r-- 1 root root   70427 Jan 10 03:27 densenet_feature_maps.png
+-rw-r--r-- 1 root root   17657 Jan 10 03:27 resnet_feature_maps.png
+```
+
+Upload to S3 from the container:
+```bash
+aws s3 cp /app/visualization_outputs_20250110_032155 s3://dry-bean-bucket-c/pipeline-testing --recursive
+```
+
+### preprocessing_steps.png
+
+<img width="1749" alt="image" src="https://github.com/user-attachments/assets/60147d9f-199f-4175-bf77-6d119b066954" />
+
 
 ## Development and Testing
 
