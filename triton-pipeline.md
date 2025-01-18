@@ -73,6 +73,7 @@ triton-pipeline/
 
 1. Clone the repository:
 ```bash
+( All the code are presented in this markdown for ease of understanding, not repo as of now ).
 git clone <repository-url>
 cd triton-pipeline
 ```
@@ -91,6 +92,30 @@ seaborn==0.13.1
 ```
 
 3. Build the Docker image:
+```Dockerfile
+FROM <account_id>.dkr.ecr.us-east-1.amazonaws.com/triton-grpc:24.11-py3 
+
+# Install additional Python packages
+COPY requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
+RUN pip install awscli
+
+# Copy application code
+COPY monitoring.py /app/monitoring.py
+COPY pipeline.py /app/pipeline.py
+COPY serve.py /app/serve.py
+
+# Set working directory
+WORKDIR /app
+
+# Environment variables for Triton
+ENV CUDA_VISIBLE_DEVICES=0
+ENV PATH="/usr/local/bin:${PATH}"
+
+# Default command to start both Triton server and Flask API
+CMD ["bash", "-c", "tritonserver --model-repository=s3://dry-bean-bucket-c/models --http-port=8000 --grpc-port=8001 --metrics-port=8002 & python3 serve.py"]
+```
+   
 ```bash
 docker build -t triton-pipeline .
 ```
